@@ -66,7 +66,7 @@ class Option extends Model
      * @param  mixed   $value
      * @return void
      */
-    public function set($key, $value = null)
+    public static function set($key, $value = null)
     {
         $keys = is_array($key) ? $key : [$key => $value];
 
@@ -74,6 +74,7 @@ class Option extends Model
             self::updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
+        cache()->forget('options');
         // @todo: return the option
     }
 
