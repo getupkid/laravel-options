@@ -15,7 +15,7 @@ class OptionsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../database/migrations' => database_path('migrations'),
+                __DIR__ . '/../database/migrations' => database_path('migrations'),
             ], 'migrations');
 
             $this->commands([
@@ -29,6 +29,14 @@ class OptionsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('option', \Appstract\Options\Option::class);
+        $this->app->bind('option', function () {
+            return cache()->remember('options', config('options.cache'), function () {
+                return \Appstract\Options\Option::all(['key', 'value'])
+                    ->keyBy('key')
+                    ->transform(function ($option) {
+                        return $option->value;
+                    })->toArray();
+            });
+        });
     }
 }
