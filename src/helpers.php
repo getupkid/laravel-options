@@ -1,6 +1,6 @@
 <?php
 
-if (! function_exists('option')) {
+if (!function_exists('option')) {
     /**
      * Get / set the specified option value.
      *
@@ -13,18 +13,18 @@ if (! function_exists('option')) {
     function option($key = null, $default = null)
     {
         if (is_null($key)) {
-            return app('option');
+            return;
         }
 
         if (is_array($key)) {
-            return app('option')->set($key);
+            return \Appstract\Options\Option::set($key);
         }
 
-        return app('option')->get($key, $default);
+        return app('option')[$key] ?? $default;
     }
 }
 
-if (! function_exists('option_exists')) {
+if (!function_exists('option_exists')) {
     /**
      * Check the specified option exits.
      *
